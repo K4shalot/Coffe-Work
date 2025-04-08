@@ -1,0 +1,92 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ cafe.name }}</title>
+    <link rel="stylesheet" href="{% static 'my_app/style.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'my_app/logo.png' %}" alt="Logo" class="logo">
+            </a>
+        </div>
+        <div class="header-center">
+            <h1 class="site-title">CoffeWork</h1>
+        </div>
+        <div class="header-right">
+            <a href="{% url 'home' %}">Back</a>
+        </div>
+    </header>
+
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+
+    <section class="cafe-container">
+        <div class="cafe-gallery-section">
+            <div class="gallery-wrapper">
+                <div class="cafe-gallery" tabindex="0">
+                    {% for photo in cafe.photos.all %}
+                        <div class="gallery-item" id="photo{{ forloop.counter0 }}">
+                            <img src="{{ photo.image.url }}" alt="{{ photo.caption }}">
+                            {% if photo.caption %}
+                                <p class="caption">{{ photo.caption }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if cafe.photos.all %}
+            <div class="controls">
+                {% for photo in cafe.photos.all %}
+                    <a href="#photo{{ forloop.counter0 }}">⬤</a>
+                {% endfor %}
+            </div>
+            </div>
+        {% else %}
+            <p>No photos available.</p>
+        {% endif %}
+        </div>
+
+        <div class="cafe-description">
+            <p><strong>Rating:</strong> {{ cafe.average_rating|floatformat:1 }} ⭐ ({{ cafe.total_reviews }} reviews)</p>
+            <p>{{ cafe.description }}</p>
+            <hr>
+            <div class="full-description">
+                <h2>Detailed description</h2>
+                <p>{{ cafe.full_description }}</p>
+            </div>
+        </div>
+
+    {% if cafe.google_map_embed %}
+    <div class="map-container">
+        {{ cafe.google_map_embed|safe }}
+    </div>
+    {% endif %}
+
+    <h2>Reviews</h2>
+    <div class="reviews-container">
+        {% for review in cafe.reviews.all %}
+            <div class="review">
+                <strong>{{ review.author }}</strong> – {{ review.date }}<br>
+                <span class="stars">
+                    {% for _ in "12345"|slice:":review.rating" %}
+                        ⭐
+                    {% endfor %}
+                </span>
+                <p>{{ review.review_text }}</p>
+            </div>
+        {% empty %}
+            <p>No reviews yet.</p>
+        {% endfor %}
+    </div>
+    </section>
+    <footer>
+        <p>&copy; 2025 Work Friendly Cafes. All rights reserved.</p>
+    </footer>
+</body>
+</html>

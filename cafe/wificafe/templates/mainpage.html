@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Cafes</title>
+    <link rel="stylesheet" href="{% static 'my_app/style.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'my_app/logo.png' %}" alt="Logo" class="logo">
+            </a>
+        </div>
+        <div class="header-center">
+            <h1 class="site-title">CoffeWork</h1>
+        </div>
+        <div class="header-right">
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+     </div>
+
+    <div class="intro-container">
+        <p class="intro-text">
+            Looking for a cozy place to work while enjoying great coffee? Here are some of the best work-friendly cafes where you can focus, relax, and enjoy a great atmosphere.
+        </p>
+    </div>
+
+    <main>
+        <section class="cafes">
+            {% for cafe in cafes %}
+                <div class="cafe-card">
+                    <a href="{% url 'cafe_detail' cafe.id %}" target="_self">
+                        {% if cafe.photo %}
+                            <img src="{{ cafe.photo.url }}" alt="{{ cafe.name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/300" alt="Placeholder">
+                        {% endif %}
+                    </a>
+                    <h3>{{ cafe.name }}</h3>
+                    <p>{{ cafe.description }}</p>
+                    <a href="{% url 'cafe_detail' cafe.id %}" target="_self">Read more</a>
+                </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <div class="about-container" id="about">
+        <h2>About This Site</h2>
+        <p class="about-text">
+            This website is dedicated to helping remote workers, students, and coffee lovers find the best cafes in town where they can work comfortably.
+        </p>
+    </div>
+
+    <div class="contact-container" id="contact">
+        <h2>Contact Us</h2>
+        <p>If you have suggestions, questions, or want to recommend a café, feel free to reach out!</p>
+        <form action="#" method="post">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" required><br>
+
+            <label for="message">Message:</label><br>
+            <textarea id="message" name="message" rows="5" required></textarea><br>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Work Friendly Cafes. All rights reserved.</p>
+    </footer>
+</body>
+</html>
